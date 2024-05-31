@@ -1,0 +1,25 @@
+@charset "utf-8";
+* {
+    margin: 0;
+    padding: 0;
+}
+#wrap {
+    width: 100%;
+    height: auto;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+ul, li {
+    list-style: none;
+}
+
+input {
+	outline: none;
+}

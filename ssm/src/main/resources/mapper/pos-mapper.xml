@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="posMapper">
+	<resultMap type="Table" id="resultTable">
+		<result property="tableNo" column="TABLE_NO" />
+		<result property="tableName" column="TABLE_NAME" />
+		<result property="tableX" column="TABLE_X" />
+		<result property="tableY" column="TABLE_Y" />
+	</resultMap>
+
+    <!-- POS 관련 쿼리 -->
+    <insert id="addPOS" parameterType="com.sdm.ssm.pos.model.vo.POS">
+        <!-- 사용자 별로 POS 테이블 생성하는 프로시저 호출 -->
+        {call CREATE_TB_POS(#{id})}
+    </insert>
+
+    <select id="getAllPOS" resultType="com.sdm.ssm.pos.model.vo.POS">
+        <!-- 모든 POS 조회하는 쿼리 -->
+        SELECT POS_NO, POS_NAME FROM TB_POS
+    </select>
+
+    <update id="updatePOS" parameterType="com.sdm.ssm.pos.model.vo.POS">
+        <!-- POS 정보 업데이트하는 쿼리 -->
+        UPDATE TB_POS SET POS_NAME = #{posName} WHERE POS_NO = #{posNo}
+    </update>
+
+    <delete id="deletePOS" parameterType="int">
+        <!-- POS 삭제하는 쿼리 -->
+        DELETE FROM TB_POS WHERE POS_NO = #{posNo}
+    </delete>
+
+    <!-- Menu 관련 쿼리 -->
+    <insert id="addMenu" parameterType="com.sdm.ssm.pos.model.vo.Menu">
+        <!-- 사용자 별로 메뉴 테이블 생성하는 프로시저 호출 -->
+        {call CREATE_TB_MENU(#{id})}
+    </insert>
+
+    <select id="getAllMenus" resultType="com.sdm.ssm.pos.model.vo.Menu">
+        <!-- 모든 메뉴 조회하는 쿼리 -->
+        SELECT MENU_NO, MENU_NAME, PRICE, DESCRIPTION FROM TB_MENU_#{id}
+    </select>
+
+    <update id="updateMenu" parameterType="com.sdm.ssm.pos.model.vo.Menu">
+        <!-- 메뉴 정보 업데이트하는 쿼리 -->
+        UPDATE TB_MENU_#{id} SET MENU_NAME = #{name}, PRICE = #{price}, DESCRIPTION = #{description} WHERE MENU_NO = #{menuNo}
+    </update>
+
+    <delete id="deleteMenu" parameterType="int">
+        <!-- 메뉴 삭제하는 쿼리 -->
+        DELETE FROM TB_MENU_#{id} WHERE MENU_NO = #{menuNo}
+    </delete>
+
+    <!-- Inventory 관련 쿼리 -->
+    <insert id="addInventory" parameterType="com.sdm.ssm.pos.model.vo.Inventory">
+        <!-- 사용자 별로 인벤토리 테이블 생성하는 프로시저 호출 -->
+        {call create_inventory_table(#{id})}
+    </insert>
+
+    <select id="getInventoryByGoodsNo" parameterType="int" resultType="com.sdm.ssm.pos.model.vo.Inventory">
+        <!-- 사용자 별로 인벤토리 조회하는 쿼리 -->
+        SELECT GOODS_NO, PD_QUANTITY, MIN_ALARM_QUANTITY, MIN_ORDER_QUANTITY FROM TB_INVENTORY_#{id} WHERE GOODS_NO = #{goodsNo}
+    </select>
+
+    <update id="updateInventory" parameterType="com.sdm.ssm.pos.model.vo.Inventory">
+        <!-- 사용자 별로 인벤토리 업데이트하는 쿼리 -->
+        UPDATE TB_INVENTORY_#{id} SET PD_QUANTITY = #{pdQuantity}, MIN_ALARM_QUANTITY = #{minAlarmQuantity}, MIN_ORDER_QUANTITY = #{minOrderQuantity} WHERE GOODS_NO = #{goodsNo}
+    </update>
+
+    <delete id="deleteInventoryByGoodsNo" parameterType="int">
+        <!-- 사용자 별로 인벤토리 삭제하는 쿼리 -->
+        DELETE FROM TB_INVENTORY_#{id} WHERE GOODS_NO = #{goodsNo}
+    </delete>
+    
+    <!-- 테이블 정보조회 -->
+    <select id="selectTableList" parameterType="_int" resultMap="resultTable">
+    	select * FROM TB_TABLE_${id}
+    </select>
+    <insert id="insertTable" parameterType="Table">
+    	INSERT INTO TB_TABLE_${id} VALUES(TB_TABLE_${id}_TABLE_NO_SEQ.NEXTVAL,#{tableName},#{tableX},#{tableY})
+    </insert>
+    <delete id="deleteTable" parameterType="Table">
+    	delete TB_TABLE_${id} where table_name=#{tableName}
+    </delete>
+</mapper>

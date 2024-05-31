@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="noticeMapper">
+	
+	<resultMap type="Notice" id="resultTop5">
+		<result property="noticeNo" column="NOTICE_NO" />
+		<result property="noticeTitle" column="NOTICE_TITLE" />
+	</resultMap>
+	<resultMap type="Notice" id="resultList">
+		<result property="noticeNo" column="NOTICE_NO" />
+		<result property="writer" column="USER_ID" />
+		<result property="noticeTitle" column="NOTICE_TITLE" />
+		<result property="noticeContent" column="NOTICE_CONTENT" />
+		<result property="writeDate" column="WRITE_DATE" />
+		<result property="modifyDate" column="MODIFY_DATE" />
+		<result property="readCount" column="READ_COUNT" />
+		<result property="importancy" column="IMPORTANCY" />
+	</resultMap>
+	<select id="selectTop5" resultMap="resultTop5">
+		SELECT * FROM (SELECT ROWNUM RNUM, NOTICE_NO, NOTICE_TITLE
+								 FROM ( SELECT NOTICE_NO, NOTICE_TITLE FROM tb_NOTICE WHERE IMPORTANCY = '3' 
+											  ORDER BY WRITE_DATE DESC)) 
+		 WHERE RNUM BETWEEN 1 AND 5
+	</select>
+	<select id ="selectListCount" resultType ="_int">
+		select Count(*) FROM TB_NOTICE
+	</select>
+	<select id="selectList" parameterType ="Paging" resultMap="resultList">
+			select * from (select rownum rnum, NOTICE_NO, WRITER, NOTICE_TITLE, NOTICE_CONTENT, WRITE_DATE, MODIFY_DATE, READ_COUNT, IMPORTANCY, user_id
+       					 from(select * from tb_notice  left join TB_USER  ON (Writer = id)
+                       	 order by write_date desc) )
+	where rnum between #{startRow} and #{endRow}
+	</select>
+	<select id="selectSearchTitleCount" parameterType="string" resultType="_int">
+	select count(*) from tb_notice where notice_title like '%${title}%'
+	</select>
+	<select id="selectSearchWriterCount" parameterType="string" resultType="_int">
+	select count(*) from tb_notice left join TB_user on (Writer=id) where user_id like '%${writer}%'
+	</select>
+	<select id="selectSearchDateCount" parameterType="SearchDate" resultType="_int">
+	select count(*) from tb_notice where write_date between #{begin} and #{end}
+	</select>
+	<select id="selectSearchTitle" parameterType ="Search" resultMap="resultList">
+			select * from (select rownum rnum, NOTICE_NO, WRITER, NOTICE_TITLE, NOTICE_CONTENT, WRITE_DATE, MODIFY_DATE, READ_COUNT, IMPORTANCY, user_id
+       					 from(select * from tb_notice left join TB_USER  ON (Writer = id)
+       					 where notice_title like '%${keyword}%'
+                       	 order by write_date desc) )
+	where rnum between #{startRow} and #{endRow}
+	</select>
+	<select id="selectSearchWriter" parameterType ="Search" resultMap="resultList">
+			select * from (select rownum rnum, NOTICE_NO, WRITER, NOTICE_TITLE, NOTICE_CONTENT, WRITE_DATE, MODIFY_DATE, READ_COUNT, IMPORTANCY, user_id
+       					 from(select * from tb_notice  left join TB_USER  ON (Writer = id)
+       					 where user_id like '%${keyword}%'
+                       	 order by write_date desc) )
+	where rnum between #{startRow} and #{endRow}
+	</select>
+	<select id="selectSearchDate" parameterType ="Search" resultMap="resultList">
+			select * from (select rownum rnum, NOTICE_NO, WRITER, NOTICE_TITLE, NOTICE_CONTENT, WRITE_DATE, MODIFY_DATE, READ_COUNT, IMPORTANCY, user_id
+       					 from(select * from tb_notice  left join TB_USER  ON (Writer = id)
+       					 where write_date between #{begin} and #{end}
+                       	 order by write_date desc) )
+	where rnum between #{startRow} and #{endRow}
+	</select>
+	<select id="selectNotice" parameterType ="_int" resultMap="resultList">
+	select * from tb_notice left join tb_user on (writer = id ) where notice_no = #{no}
+	</select>
+	<select id="selectMostResentNoticeNo" parameterType="_int" resultType="_int">
+	select max(notice_no) from tb_notice where writer=#{id}
+	</select>
+	
+	<!-- DML -->
+	<insert id="insertNotice" parameterType="Notice" >
+	insert into tb_notice values(notice_seq.NEXTVAL,${writer},#{noticeTitle},#{noticeContent},
+	sysdate,sysdate,0,#{importancy})
+	</insert>
+	<update id="updateAddReadCount" parameterType="_int">
+	update tb_notice set read_count = read_count + 1 where notice_no = #{no}
+	</update>
+	<delete id="deleteNotice" parameterType="_int">
+	delete tb_notice where notice_no=#{noticeNo}
+	</delete>
+	<update id="updateNotice" parameterType="Notice">
+	UPDATE tb_notice SET notice_title = #{noticeTitle}, notice_content = #{noticeContent}, modify_date = sysdate, 
+    importancy = #{importancy}
+    where notice_no = #{noticeNo}
+	</update>
+</mapper>

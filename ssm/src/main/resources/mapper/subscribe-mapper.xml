@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="subscribeMapper">
+	<resultMap type="Subscribe" id="resultSubscribe">
+		<result property="subscribeNo" column="SUBSCRIBE_NO" />
+		<result property="subscribeName" column="SUBSCRIBE_NAME" />
+		<result property="price" column="PRICE" />
+		<result property="subscribeDate" column="SUBSCRIBE_DATE" />
+	</resultMap>
+	<resultMap type="SubscribePayments" id="resultSubsPayments">
+		<result property="payNo" column="PAY_NO" />
+		<result property="SubscribeName" column="SUBSCRIBE_NAME" />
+		<result property="amount" column="AMOUNT" />
+		<result property="userId" column="USER_ID" />
+		<result property="payMethod" column="PAY_METHOD" />
+		<result property="payDate" column="PAY_DATE" />
+	</resultMap>
+	<select id="selectList" resultMap="resultSubscribe">
+		select * from tb_subscribe
+		order by subscribe_no
+	</select>
+	<select id="selectSub" parameterType="_int"
+		resultMap="resultSubscribe">
+		select * from tb_subscribe where subscribe_no = #{subsNo}
+	</select>
+	<!-- 결제내역 조회 유저아이디로 -->
+	<select id="selectSubscribePaymentsByUserId"
+		parameterType="_int" resultMap="resultSubsPayments">
+	select * from TB_SUBSCRIBE_PAYMENT where USER_ID = #{id}
+	</select>
+	<update id="updateUserServiceDate" parameterType="UserSubscribe">
+		update tb_user
+		set SERVICE_DATE = ADD_MONTHS(SYSDATE,
+		(select subscribe_date from
+		tb_subscribe where subscribe_no =
+		#{subscribeNo})) where id=#{id}
+	</update>
+	<insert id="insertSubscribePayment"
+		parameterType="UserSubscribe">
+		insert into TB_SUBSCRIBE_PAYMENT
+		values(SUBSCRIBE_PAYMENT_SEQ.nextval,#{subscribeName},#{amount},#{id},#{payMethod},sysdate)
+	</insert>
+	<update id="updateUserServiceDate2"
+		parameterType="UserSubscribe">
+		update tb_user set SERVICE_DATE =
+		ADD_MONTHS(SERVICE_DATE,
+		(select subscribe_date from tb_subscribe where
+		subscribe_no =
+		#{subscribeNo})) where id=#{id}
+	</update>
+	<update id="updateSubscribe" parameterType="Subscribe">
+		UPDATE tb_subscribe
+		SET SUBSCRIBE_NAME = #{subscribeName},
+		PRICE = #{price},
+		SUBSCRIBE_DATE
+		= #{subscribeDate}
+		WHERE subscribe_no = #{subscribeNo}
+	</update>
+	<delete id="deleteSubscribe" parameterType="Subscribe">
+		delete tb_subscribe
+		where subscribe_no = #{subscribeNo}
+	</delete>
+	<insert id="insertSubscribe" parameterType="Subscribe">
+		insert into
+		tb_subscribe
+		values(SUBSCRIBE_SEQ.nextval,#{subscribeName},#{price},#{subscribeDate}
+		)
+	</insert>
+</mapper>

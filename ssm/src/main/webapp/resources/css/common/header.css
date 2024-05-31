@@ -1,0 +1,153 @@
+@charset "UTF-8";
+@import url(reset.css);
+
+header {
+	position: fixed;
+	width: 100%;
+	background-color: rgba(255, 255, 255, 0.8);
+	z-index: 999;
+}
+
+header .inner-header {
+    display: flex;
+    justify-content: center;
+    padding: 0px;
+    position: relative;
+}
+
+header .inner-header::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 1px;
+	background-color: grey;
+}
+
+header .inner-header nav {
+	max-width: 1600px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+header .inner-header nav h1 {
+}
+
+header .inner-header nav h1.logo {
+    width: 150px;
+}
+
+header .inner-header nav h1.logo a {
+    display: block;
+}
+
+header .inner-header nav h1.logo a img {
+    display: block;
+    height: 110px;
+}
+
+header .inner-header nav .gnb {
+    flex: 0 1 600px;
+}
+
+header .inner-header nav .gnb ul {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 0px;
+}
+
+header .inner-header nav .gnb ul li {
+    border-radius: 5px;
+    padding: 0 3px;
+    line-height: 30px;
+    color: #2c1a0b;
+    transition: all 0.2s ease-in-out;
+}
+
+header .inner-header nav .gnb ul li a {
+    display: block;
+    color: inherit;
+    position: relative;
+    transition: all 0.2s ease-in-out;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: sans-serif;
+}
+
+header .inner-header nav .gnb ul li a::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 0%;
+	height: 1.5px;
+	background-color: #fff;
+	transition: all 0.15s ease-in-out;
+}
+
+header .inner-header nav .gnb ul li:hover {
+    /* background-color: orange; */
+    color: orange;
+}
+
+header .inner-header nav .gnb ul li:hover a::after{
+    color: orange;
+    left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 2px;
+	background-color: orange;
+}
+
+header .inner-header nav .login-box {
+    display: flex;
+    padding: 10px 0px;
+    gap: 30px;
+}
+
+header .inner-header nav .login-box .profile-img-box {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    border-radius: 50%;
+    box-shadow: 0px 0px 1px 0.5px grey;
+}
+
+header .inner-header nav .login-box .profile-img-box img {
+    display: block;
+    width: 100%;
+    height: 80px;
+}
+
+header .inner-header nav .login-box .login-button-box {
+    padding: 15px 0;
+}
+
+header .inner-header nav .login-box .login-button-box button {
+    background-color: #fff; 
+    width: 80px;
+    height: 50px;
+    cursor: pointer;
+    color: #000;
+    outline: none;
+    border: 0;
+    transition: all 0.15s ease-in-out;
+    font-size: 18px;
+    font-weight: 600;
+}
+header .inner-header nav .login-box .login-button-box button:hover {
+    cursor: pointer;
+    color: orange;
+}
+
+
+
+
+
+
+
+
+

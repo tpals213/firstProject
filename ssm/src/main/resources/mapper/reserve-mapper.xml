@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reserveMapper">
+
+	<resultMap type="Reserve" id="resultList">
+		<result property="rsrvNum" column="RSRV_NUM" />
+		<result property="rsrvDate" column="RSRV_DATE" />
+		<result property="rsrvTime" column="RSRV_TIME" />
+		<result property="rsrvName" column="RSRV_NAME" />
+		<result property="rsrvTelno" column="RSRV_TELNO" />
+		<result property="rsrvInwon" column="RSRV_INWON" />
+		<result property="rsrvSubject" column="RSRV_SUBJECT" />
+		<result property="rsrvMemo" column="RSRV_MEMO" />
+		<result property="writer" column="WRITER" />
+		<result property="writeDate" column="WRITE_DATE" />
+	</resultMap>
+	
+	<select id="selectRsrvList" parameterType="com.sdm.ssm.common.SerachDateStr" resultMap="resultList">
+		SELECT rsrv_num, rsrv_date, rsrv_time
+				,rsrv_name, rsrv_telno, rsrv_inwon
+				,rsrv_subject, rsrv_memo
+				,writer, write_date
+		FROM (SELECT * FROM TB_RESERVATION_${ id }
+				WHERE rsrv_date BETWEEN #{ sdate } AND #{ edate }
+		     ORDER BY rsrv_date desc, rsrv_time asc, rsrv_num asc)
+	</select>
+	
+	<select id="selectRsrvListCount" resultType="_int">
+		SELECT count(*) FROM TB_RESERVATION_${ id }
+		WHERE rsrv_date = #{ rsrvDate }
+	</select>
+	
+	<select id="selectRsrvList_old" parameterType="Search" resultMap="resultList">
+		SELECT *
+		FROM
+		(SELECT rownum rnum, rsrv_num
+					,rsrv_date, rsrv_time
+					,rsrv_name, rsrv_telno, rsrv_inwon
+					,rsrv_subject, rsrv_memo
+					,writer, write_date
+		FROM (SELECT * FROM TB_RESERVATION_${ id }
+				WHERE rsrv_date = #{ keyword }
+		     ORDER BY rsrv_date desc, rsrv_time desc))
+		WHERE rnum BETWEEN #{ startRow } AND #{ endRow }
+	</select>
+	
+	<select id="selectRsrvDetail" parameterType="Reserve" resultMap="resultList">
+		SELECT *
+		FROM TB_RESERVATION_${ id }
+		WHERE rsrv_num = #{ rsrvNum }
+	</select>
+	
+	<!-- dml *************************************************************** -->
+	<!-- sequence 적용(2024.04.05) -->
+	<insert id="insertReserve" parameterType="Reserve">
+		INSERT INTO TB_RESERVATION_${ id }
+					(rsrv_num
+					,rsrv_date, rsrv_time
+					,rsrv_name, rsrv_telno, rsrv_inwon
+					,rsrv_subject, rsrv_memo
+					,writer, write_date)
+		VALUES (TB_RESERVATION_${ id }_RSRV_NUM_SEQ.NEXTVAL
+				,#{ rsrvDate }, #{ rsrvTime }
+				,#{ rsrvName }, #{ rsrvTelno }, #{ rsrvInwon }
+				,#{ rsrvSubject }, #{ rsrvMemo }
+				,#{ writer }, default)
+	</insert>
+	
+	<update id="updateReserve" parameterType="Reserve">
+		UPDATE TB_RESERVATION_${ id }
+		   SET rsrv_date = #{ rsrvDate }
+		   		,rsrv_time = #{ rsrvTime }
+		   		,rsrv_name = #{ rsrvName }
+		   		,rsrv_telno = #{ rsrvTelno }
+		   		,rsrv_inwon = #{ rsrvInwon }
+		   		,rsrv_subject = #{ rsrvSubject }
+		   		,rsrv_memo = #{ rsrvMemo }
+		   		,writer = #{ writer }
+		   		,write_date = sysdate  
+		WHERE rsrv_num = #{ rsrvNum }
+	</update>
+	
+	<delete id="deleteReserve" parameterType="Reserve">
+		DELETE FROM TB_RESERVATION_${ id } 
+		WHERE rsrv_num = #{ rsrvNum }
+	</delete>
+	
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accountMapper">
+	
+	<resultMap id="AccountResultListALL" type="Account">
+		<result property="id" column="ID" />
+		<result property="yearmonth" column="YEARMONTH" />
+		<result property="title" column="TITLE" />
+		<result property="price" column="PRICE" />
+	</resultMap>
+
+	<select id="countNull" parameterType="Account" resultType="int">
+		select NVL(sum(PRICE), 0)
+		FROM TB_ACCOUNT_${id}
+		WHERE YEARMONTH = #{yearmonth}
+		AND TITLE = #{title}
+	</select>
+
+	<update id="updateAccount" parameterType="Account">
+		update TB_ACCOUNT_${id}
+		SET ID = ${id},
+			 YEARMONTH = #{yearmonth},
+			 PRICE = #{price}
+		WHERE TITLE = #{title}
+	</update>
+
+	<insert id="insertAccount" parameterType="Account">
+		INSERT INTO TB_ACCOUNT_${id}
+		VALUES (${id}, #{yearmonth}, #{title}, #{price})
+	</insert>
+
+	<select id= "calTax" resultType="int">		
+		select NVL(sum(PRICE), 0)
+		from TB_ACCOUNT_${id}
+		WHERE yearmonth = #{yearmonth}
+		AND TITLE = '세금'
+	</select>
+	
+	<select id= "calCost" resultType="int">
+		select NVL(sum(PRICE), 0)
+		from TB_ACCOUNT_${id}
+		WHERE yearmonth = #{yearmonth}
+		AND TITLE = '기타비용'
+	</select>
+		
+	<select id= "calRent" parameterType="Account" resultType="int">
+		select NVL(sum(PRICE), 0) 
+		from TB_ACCOUNT_${id}
+		WHERE yearmonth = #{yearmonth}
+		AND TITLE = '월세'
+	</select>
+	
+	<select id= "calSale" parameterType="Account" resultType="int">
+		select NVL(sum(PRICE), 0) 
+		from TB_ACCOUNT_${id}
+		WHERE yearmonth = #{yearmonth}
+		AND TITLE = '매출'
+	</select>
+
+</mapper>

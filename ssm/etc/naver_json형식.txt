@@ -1,0 +1,14 @@
+INFO : com.sdm.ssm.user.controller.UserController - 2. ncallback.do : {"resultcode":"00","message":"success","response":
+{
+"id":"j_bnIVcHI314kvYWdhjjuhVRkMLM9BS2miBjTOzmQ1Q"
+,"nickname":"\ubb38\uc2b9\uc885",
+"profile_image":"https:\/\/phinf.pstatic.net\/contact\/20210527_213\/1622093325302Epotc_JPEG\/image.jpg",
+"age":"20-29",
+"gender":"M",
+"email":"msj102525@naver.com"
+,"mobile":"010-7288-5366",
+"mobile_e164":"+821072885366"
+,"name":"\ubb38\uc2b9\uc885"
+,"birthday":"07-11",
+"birthyear":"1998"}}
+INFO : com.sdm.ssm.user.controller.UserController - 3. nickname : 문승종

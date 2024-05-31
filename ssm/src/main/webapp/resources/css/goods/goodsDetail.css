@@ -1,0 +1,83 @@
+@charset "UTF-8";
+$('input[name=_selected_all_]').on('change', function(){
+  $('input[name=_selected_]').prop('checked', this.checked);
+});
+
+
+
+fieldset#ss {
+	width: 600px;
+	position: relative;
+	left: 450px;
+}
+
+form fieldset {
+	width: 600px;
+}
+
+form.sform {
+	background: lightgray;
+	width: 630px;
+	position: relative;
+	left: 400px;
+	display: none; /* 안 보이게 함 */
+}
+
+h1 {
+	color: black;
+	font-size: 30px;
+}
+
+body {
+	color: #666;
+	font: 14px/24px "Open Sans", "HelveticaNeue-Light",
+		"Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial,
+		"Lucida Grande", Sans-Serif;
+}
+
+table {
+  border-collapse: collapse;
+  width: 500px;
+  margin: 1rem auto;
+  background-color: white;
+}
+
+/* 테이블 행 */
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  background-color: #1b1b1b;
+  color: #ddd;
+}
+
+/* 테이블 올렸을 때 */
+tbody tr:hover {
+  background-color: #d3d3d3;
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+/* 테이블 비율 */
+th:nth-child(1),
+td:nth-child(1) {
+  width: 15%;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 55%;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 30%;
+}
+
+tr:nth-child(even) {
+  background-color: #fff6f6;
+}

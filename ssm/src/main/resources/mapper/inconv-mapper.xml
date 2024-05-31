@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inconvMapper">
+	<resultMap type="InconvinienceBoard" id="resultTop10">
+		<result property="boardNo" column="BOARD_NO" />
+		<result property="writer" column="user_id" />
+		<result property="boardTitle" column="BOARD_TITLE" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+	<resultMap type="InconvinienceBoard" id="resultList">
+		<result property="boardNo" column="BOARD_NO" />
+		<result property="writer" column="user_id" />
+		<result property="boardTitle" column="BOARD_TITLE" />
+		<result property="boardContent" column="BOARD_CONTENT" />
+		<result property="writeDate" column="WRITE_DATE" />
+		<result property="modifyDate" column="MODIFY_DATE" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+	<resultMap type="InconvinienceBoardReply" id="reply">
+		<result property="boardNo" column="BOARD_NO" />
+		<result property="user" column="user_id" />
+		<result property="writeDate" column="WRITE_DATE" />
+		<result property="commentContent" column="COMMENT_CONTENT" />
+		<result property="id" column="id" />
+	</resultMap>
+	<select id="selectTop10" resultMap="resultTop10">
+		select board_no, board_title, status, user_id
+		from(select rownum rnum, board_no, user_id, board_title, status
+				from(select * from tb_inconvinience_board left join tb_user on writer = id where status = 1 order by write_date))
+		where rnum between 1 and 10
+	</select>
+	<select id="selectTop5" parameterType="_int" resultMap="resultTop10">
+	select board_no, board_title, status, user_id
+		from(select rownum rnum, board_no, user_id, board_title, status
+				from(select * from tb_inconvinience_board left join tb_user on writer = id where id=#{id} order by write_date))
+		where rnum between 1 and 5
+	</select>
+	<select id ="selectInconv" parameterType="_int" resultMap ="resultList">
+		select * from TB_INCONVINIENCE_BOARD left join TB_user on writer=id where board_no = #{boardno}
+	</select>
+	<select id ="selectListCount" resultType ="_int">
+select count(*) from TB_INCONVINIENCE_BOARD left join TB_user on writer=id
+	</select>
+	<select id ="selectList" parameterType="Paging" resultMap ="resultList">
+	select * from (select rownum rnum, BOARD_NO, WRITER, BOARD_TITLE, BOARD_CONTENT, WRITE_DATE, MODIFY_DATE, STATUS, user_id
+                    from(select * from TB_INCONVINIENCE_BOARD left join TB_user on writer=id
+                            order by write_date desc) )
+	where rnum between #{startRow} and #{endRow}
+		
+	</select>
+	<select id ="selectSearchTitleCount" parameterType="string"  resultType ="_int">
+		select count(*) from TB_INCONVINIENCE_BOARD left join TB_user on writer=id where board_title like '%${keyword}%'
+	</select>
+	<select id ="selectSearchTitle" parameterType="Search"  resultMap ="resultList">
+	select * from (select rownum rnum, BOARD_NO, WRITER, BOARD_TITLE, BOARD_CONTENT, WRITE_DATE, MODIFY_DATE, STATUS, user_id
+                    from(select * from TB_INCONVINIENCE_BOARD left join TB_user on writer=id where board_title like '%${keyword}%'
+                            order by write_date desc) )
+	where rnum between #{startRow} and #{endRow}
+	</select>
+	<select id ="selectSearchWriterCount" parameterType="string"  resultType ="_int">
+		select count(*) from TB_INCONVINIENCE_BOARD left join TB_user on writer=id where user_id like '%${keyword}%'
+	</select>
+	<select id ="selectSearchWriter" parameterType="Search"  resultMap ="resultList">
+	select * from (select rownum rnum, BOARD_NO, WRITER, BOARD_TITLE, BOARD_CONTENT, WRITE_DATE, MODIFY_DATE, STATUS, user_id
+                    from(select * from TB_INCONVINIENCE_BOARD left join TB_user on writer=id where user_id like '%${keyword}%'
+                            order by write_date desc) )
+	where rnum between #{startRow} and #{endRow}
+	</select>
+	<select id ="selectSearchDateCount" parameterType="SearchDate" resultType ="_int">
+	select count(*) from TB_INCONVINIENCE_BOARD left join TB_user on writer=id where write_date between #{begin} and #{end}
+	</select>
+	<select id ="selectSearchDate" parameterType="Search" resultMap ="resultList">
+	select * from (select rownum rnum, BOARD_NO, WRITER, BOARD_TITLE, BOARD_CONTENT, WRITE_DATE, MODIFY_DATE, STATUS, user_id
+                    from(select * from TB_INCONVINIENCE_BOARD left join TB_user on writer=id where write_date between #{begin} and #{end}
+                            order by write_date desc) )
+	where rnum between #{startRow} and #{endRow}
+	</select>
+	<select id="selectMostResentInconvNo" parameterType="_int" resultType="_int">
+	select MAX(BOARD_NO) from TB_INCONVINIENCE_BOARD where writer = #{userid}
+	</select>
+	<insert id="insertInconvBoard" parameterType="InconvinienceBoard">
+	insert into TB_INCONVINIENCE_BOARD values(INCONVINIENCE_SEQ.NEXTVAL,#{id},#{boardTitle},#{boardContent},
+	sysdate,sysdate,1)
+	</insert>
+		<delete id="deleteInconvBoard" parameterType="_int">
+	delete tb_Inconvinience_Board where BOARD_NO=#{boardNo}
+	</delete>
+	<update id="updateinconvBoard" parameterType="InconvinienceBoard">
+	UPDATE TB_INCONVINIENCE_BOARD SET BOARD_TITLE = #{boardTitle}, BOARD_CONTENT = #{boardContent}, MODIFY_DATE = sysdate
+    where BOARD_NO = #{boardNo}
+	</update>
+	<update id="updateinconvStatus" parameterType="InconvinienceBoard">
+	UPDATE TB_INCONVINIENCE_BOARD SET STATUS = #{status}
+    where BOARD_NO = #{boardNo}
+	</update>
+	<!-- 댓글 -->
+	<select id="selectInconvReply" parameterType="_int" resultMap="reply">
+	select * from TB_INCONVINIENCE_BOARD_REPLY left join TB_user on writer=id where BOARD_NO = #{boardNo}
+	</select>
+	<insert id="insertInconvBoardReply" parameterType="InconvinienceBoardReply">
+	insert into TB_INCONVINIENCE_BOARD_REPLY values(#{boardNo},#{id},sysdate,#{commentContent})
+	</insert>
+	<delete id="deleteInconvBoardReply" parameterType="_int">
+	delete TB_INCONVINIENCE_BOARD_REPLY where BOARD_NO=#{boardNo}
+	</delete>
+	<update id="updateinconvBoardReply" parameterType="InconvinienceBoardReply">
+	update TB_INCONVINIENCE_BOARD_REPLY set COMMENT_CONTENT = #{commentContent}, writeDate=sysdate where boardNo = #{boardNo} 
+	</update>
+</mapper>

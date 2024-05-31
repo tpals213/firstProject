@@ -1,0 +1,368 @@
+@charset "UTF-8";
+.section-container {
+	background-color: #fff;
+}
+
+section {
+	/* border: 1px solid #000; */
+	position: relative;
+}
+
+section::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 0%;
+	height: 1px;
+	background-color: grey;
+}
+
+section .padding-top {
+	padding-top: 20px;
+}
+
+section .inner-section {
+	max-width: 1600px;
+	margin: 0 auto;
+	display: flex;
+	flex: 1;
+	justify-content: space-between;
+	padding: 50PX 0px;
+}
+.inner-section-incon{
+	max-width: 1600px;
+	margin: 0 auto;
+	display: flex;
+	flex: 1;
+	justify-content: space-between;
+	padding: 50PX 0px;
+	align-items: stretch;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    text-align: center;
+}
+
+
+.z-index-1{
+	position: relative;
+	z-index: -1;
+}
+
+section.sec1 .inner-section.z-index-1 {
+	max-width: 1600px;
+	display: flex;
+	justify-content: space-between;
+}
+
+section.sec2 .inner-section {
+	padding: 10px 0 10px 0;
+}
+
+section .inner-section .left-section {
+	flex: 1;
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: column;
+	text-align: center;
+}
+
+section.sec2 .inner-section .left-section {
+}
+
+section.sec2 .inner-section .right-section #contents {
+	/* box-shadow: 0px 0px 1px 1px grey; */
+	padding: 10px;
+}
+
+section .inner-section .right-section {
+	/* height: 300px; */
+	flex: 1;
+}
+
+p.title {
+	margin: 10px 0 10px;
+	font-size: 28px;
+	font-weight: 600;
+	color: #4e5968;
+}
+/*관리자 불편사항 확인 테이블 CSS*/
+.inconvinience {
+	text-align: center;
+}
+
+.inconvinience table {
+	border-collapse: collapse;
+	min-width: 600px;
+	/*min-height:500px; */
+	margin: 1rem auto;
+	background-color: white;
+}
+
+.inconvinience thead {
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 테이블 행 */
+.inconvinience td {
+	padding: 9px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+	text-align: center;
+}
+
+.inconvinience th {
+	padding: 8px;
+	text-align: left;
+	text-align: center;
+	border-top: 2px solid #000;
+	border-bottom: 2px solid #000;
+	color: #000;
+}
+
+/* 테이블 올렸을 때 */
+.inconvinience tbody tr:not(.titlerow):hover {
+	background-color: rgb(255, 221, 102);
+	opacity: 0.9;
+	cursor: pointer;
+}
+/* 테이블 비율 */
+.inconvinience th:nth-child(1), .inner-section-incon td:nth-child(1) {
+	width: 55%;
+}
+
+.inconvinience th:nth-child(2), .inner-section-incon td:nth-child(2) {
+	width: 30%;
+}
+
+.inconvinience th:nth-child(3), .inner-section-incon td:nth-child(3) {
+	width: 15%;
+}
+
+.inconvinience th, .inner-section-incon td {
+	border-left: none;
+	border-right: none;
+}
+
+/*매출 테이블 CSS*/
+.monthlySale td {
+	padding: 8px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+	text-align: center;
+}
+
+.monthlySale th {
+	padding: 8px;
+	text-align: left;
+	text-align: center;
+	border-top: 2px solid #000;
+	border-bottom: 2px solid #000;
+	color: white;
+	background-color: black;
+	font-weight: bold;
+}
+
+.monthlySale th:nth-child(1){
+	width: 40%;
+}
+
+.monthlySale th:nth-child(2){
+	width: 60%;
+}
+
+.monthlySale th{
+	border-left: none;
+	border-right: none;
+}
+}
+
+#calendar > div.fc-view-harness.fc-view-harness-active > div > table > thead > tr > td > div > div > table > tbody > tr > th.fc-col-header-cell.fc-day > div {
+	display: flex;
+	justify-content: end;
+	padding: 3px;
+	cursor: default;
+}
+
+#calendar > div.fc-view-harness.fc-view-harness-active > div > table > thead > tr > td > div > div > table > tbody > tr > th.fc-col-header-cell.fc-day.fc-day-sun > div {
+	color: rgb(237, 191, 104);
+}
+
+/* 로그인 안했을 경우 */
+.n-login section.sec1 .inner-section{
+	max-width: 1600px;
+	display: flex;
+	justify-content: center;
+	position: relative;
+	height: 430px;
+}
+.n-login section.sec1 .inner-section .img-box  {
+	position: absolute;
+	left: 50%;
+	top: 15px;
+	transform: translateX(-50%);
+	width: 100%
+}
+
+.n-login section.sec1 .inner-section .img-box img {
+	margin: 0 auto;
+	display: block;
+	width: 100%;
+	height: auto;
+	opacity: 0.5;
+	box-shadow: 0px 0px 1px 1px grey;
+}
+
+.n-login section.sec1 .inner-section .description {
+	padding: 40px 0 0 0;
+	position: absolute;
+	left: 50%;
+	top: 0;
+	transform: translateX(-50%);
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+	gap: 170px;
+	font-size: 40px;
+}
+
+.n-login section.sec1 .inner-section .description p {
+	background-color: rgba(237, 191, 104, 0.6);
+	font-weight: 600;
+	font-family: sans-serif;
+}
+
+.n-login section.sec1 .inner-section .description .description-botton{
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+	gap: 30px;
+	color: #a11616;
+}
+
+.n-login section.sec2 .inner-section   {
+	max-width: 1600px;
+}
+
+.n-login section.sec2 .inner-section .img-box img {
+	margin: 0 auto;
+	display: block;
+	width: 800px;	
+	height: auto;
+}
+
+.n-login section.sec2 .inner-section .description {
+	padding: 40px 0 0 0;
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+	gap: 100px;
+	font-size: 30px;
+}
+
+.n-login section.sec2 .inner-section .description p {
+	background-color: rgba(237, 191, 104, 0.6);
+	font-weight: 600;
+	font-family: sans-serif;
+}
+
+.n-login section.sec2 .inner-section .description .description-botton{
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+	gap: 30px;
+	color: #a11616;
+}
+
+#wrap > div.section-container.n-login > section.sec2 > div > div.left-section {
+	box-shadow: 0 0 0 0 #fff;
+}
+
+.n-login section.sec3 .inner-section   {
+	max-width: 1600px;
+}
+
+.n-login section.sec3 .inner-section .img-box img {
+	margin: 0 auto;
+	display: block;
+	width: 400px;	
+	height: auto;
+}
+
+.n-login section.sec3 .inner-section .description {
+	padding: 40px 0 0 0;
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+	gap: 100px;
+	font-size: 30px;
+}
+
+.n-login section.sec3 .inner-section .description p {
+	background-color: rgba(237, 191, 104, 0.6);
+	font-weight: 600;
+	font-family: sans-serif;
+}
+
+.n-login section.sec3 .inner-section .description .description-botton{
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+	gap: 30px;
+	color: #a11616;
+}
+
+.n-login section.sec4 .inner-section   {
+	max-width: 1600px;
+}
+.n-login section.sec4 .inner-section .img-flex {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+.n-login section.sec4 .inner-section .img-box{
+	width: 28%;	
+	height: 220px;
+}
+
+.n-login section.sec4 .inner-section .img-box.padding-top {
+	padding-top: 10px;
+}
+
+
+
+.n-login section.sec4 .inner-section .img-box img{
+	display: block;
+	width: 100%;	
+	height: auto;
+}
+
+.n-login section.sec4 .inner-section .description {
+	padding: 40px 0 0 0;
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+	gap: 100px;
+	font-size: 30px;
+}
+
+.n-login section.sec4 .inner-section .description p {
+	background-color: rgba(237, 191, 104, 0.6);
+	font-weight: 600;
+	font-family: sans-serif;
+}
+
+.n-login section.sec4 .inner-section .description .description-botton{
+	display: flex;
+	flex-direction:column;
+	align-items: center;
+	gap: 30px;
+	color: #a11616;
+}
+
+#chart_div, #chart_div2{
+	min-height : 400px;
+}
+
+

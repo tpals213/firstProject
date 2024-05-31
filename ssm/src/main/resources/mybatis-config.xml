@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration PUBLIC
+"-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 마이바티스는 sql 구문에 사용되는 값이 null 이면 에러 발생함,
+			null 을 사용할 수 있게 하려면 아래의 설정을 추가함		
+	 -->
+	<settings>
+			<setting name="jdbcTypeForNull" value="NULL" />
+			<setting name="cacheEnabled" value="false" />
+	</settings>
+	
+	<!-- 존재하지 않는 클래스와 매퍼파일을 먼저 등록 설정하면 톰캣 구동 안함 : 에러 발생함 -->
+	<typeAliases>
+		<typeAlias type="com.sdm.ssm.admin.model.vo.Notice" alias="Notice"/>
+		<typeAlias type="com.sdm.ssm.common.Paging" alias="Paging"/>
+		<typeAlias type="com.sdm.ssm.common.Search" alias="Search"/>
+		<typeAlias type="com.sdm.ssm.common.SearchDate" alias="SearchDate"/>
+		<typeAlias type="com.sdm.ssm.goodsmanage.model.vo.GoodsPrint" alias="GoodsPrint"/>
+		<typeAlias type="com.sdm.ssm.goodsmanage.model.vo.Specify" alias="Specify"/>
+		<typeAlias type="com.sdm.ssm.common.SearchDate" alias="SearchDate"/>
+		<typeAlias type="com.sdm.ssm.common.Search" alias="Search"/>
+		<typeAlias type="com.sdm.ssm.user.model.vo.User" alias="User"/>
+		<typeAlias type="com.sdm.ssm.reserve.model.vo.Reserve" alias="Reserve"/>
+		<typeAlias type="com.sdm.ssm.Inconvinience.model.vo.InconvinienceBoard" alias="InconvinienceBoard"/>
+		<typeAlias type="com.sdm.ssm.Inconvinience.model.vo.InconvinienceBoardReply" alias="InconvinienceBoardReply"/>
+		<typeAlias type="com.sdm.ssm.admin.model.vo.Suspension" alias="Suspension" />
+		<typeAlias type="com.sdm.ssm.subscribe.model.vo.Subscribe" alias="Subscribe" />
+		<typeAlias type="com.sdm.ssm.subscribe.model.vo.UserSubscribe" alias="UserSubscribe" />
+		<typeAlias type="com.sdm.ssm.subscribe.model.vo.SubscribePayments" alias="SubscribePayments" />
+		<typeAlias type="com.sdm.ssm.employee.model.vo.Employee" alias="Employee"/>
+		<typeAlias type="com.sdm.ssm.employee.model.vo.SalaryInfo" alias="SalaryInfo"/>
+		<typeAlias type="com.sdm.ssm.employee.model.vo.CommuteInfo" alias="CommuteInfo"/>
+		<typeAlias type="com.sdm.ssm.employee.model.vo.Calendar" alias="Calendar"/>
+		<typeAlias type="com.sdm.ssm.admin.model.vo.CountUser" alias="CountUser"/>
+		<typeAlias type="com.sdm.ssm.admin.model.vo.Sales" alias="Sales"/>
+		<typeAlias type="com.sdm.ssm.pos.model.vo.Table" alias="Table" />
+		
+		<typeAlias type="com.sdm.ssm.pos.model.vo.POS" alias="POS"/>
+		<typeAlias type="com.sdm.ssm.pos.model.vo.Menu" alias="Menu"/>
+		<typeAlias type="com.sdm.ssm.pos.model.vo.Inventory" alias="Inventroy"/>
+		<typeAlias type="com.sdm.ssm.user.model.vo.UserFinkOut" alias="UserFinkOut"/>
+		<typeAlias type="com.sdm.ssm.account.model.vo.Account" alias="Account"/>
+	</typeAliases>
+		
+	<mappers>
+		<mapper resource="mapper/notice-mapper.xml"/>
+		<mapper resource="mapper/goods-mapper.xml"/>
+		<mapper resource="mapper/user-mapper.xml"/>
+		<mapper resource="mapper/reserve-mapper.xml"/>
+		<mapper resource="mapper/inconv-mapper.xml"/>
+		<mapper resource="mapper/specify-mapper.xml" />
+		<mapper resource="mapper/emp-mapper.xml"/>
+		<mapper resource="mapper/usermanage-mapper.xml" />
+		<mapper resource="mapper/subscribe-mapper.xml" />
+		<mapper resource="mapper/pos-mapper.xml" />
+		<mapper resource="mapper/account-mapper.xml" />
+	</mappers>
+</configuration>

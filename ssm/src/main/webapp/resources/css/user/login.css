@@ -1,0 +1,113 @@
+@charset "UTF-8";
+
+@import url("../common/reset.css");
+
+body {
+	position: relative;
+}
+
+footer {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%
+}
+
+.login-box {
+}
+
+.login-box .inner-box {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 0 0 102px 0;
+}
+
+.login-box .inner-box .logo-box {
+	display: flex;
+	justify-content: center;
+}
+
+.login-box .inner-box .logo-box img {
+	display: block;
+	width: 200px;
+}
+
+.form-box {
+	max-width: 450px;
+	margin: 0 auto;
+	box-shadow: 0px 0px 1px #000;
+	padding: 80px 20px;
+}
+
+
+.form-box ul {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	gap: 35px;
+	
+	padding: 10px 0px
+	
+}
+
+.form-box ul li {
+}
+
+.form-box ul li input {
+	width: 280px;
+	height: 40px;
+	padding: 0 10px;
+	border: 0;
+	box-shadow: 0 0 1px #000;
+}
+
+
+.form-box ul li input[type="submit"] {
+	width: 300px;
+	background: orange;
+	cursor: pointer;
+	color: #fff;
+	border: 0;
+}
+
+.form-box ul li img { 
+	display: block;
+	height: 45px;
+}
+
+.form-box ul.go-page li {
+	width: 300px
+}
+
+.form-box ul.go-page a {
+	transition: all 0.15s ease-in-out;
+}
+
+.form-box ul.go-page a:hover {
+	color: orange;
+}
+
+.form-box ul.go-page a img {
+	display: block;
+	width: 45px;
+}
+
+.form-box ul.go-page ul.sns {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
+	
+}
+
+.form-box ul.go-page ul.sns li {
+	width: 45px;
+}
+
+
+
+
+
+
+
+

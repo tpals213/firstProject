@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="goodsMapper">
+
+	<resultMap id="GoodsResultListALL" type="GoodsPrint">
+		<result property="id" column="ID" />
+		<result property="goodsNo" column="GOODS_NO" />
+		<result property="goodsName" column="GOODS_NAME" />
+		<result property="pdQuantity" column="PD_QUANTITY" />
+		<result property="goodsUnit" column="GOODS_UNIT" />
+		<result property="minAlarmQuantity" column="MIN_ALARM_QUANTITY" />
+		<result property="minOrderQuantity" column="MIN_ORDER_QUANTITY" />
+		<result property="pdNo" column="PD_NO" />
+		<result property="pdName" column="PD_NAME" />
+		<result property="pdPhone" column="PD_PHONE" />
+		<result property="goodsPrice" column="GOODS_PRICE" />
+		<result property="salePrice" column="SALE_PRICE" />
+		<result property="nation" column="NATION" />
+	</resultMap>
+	
+	<resultMap id="GoodsResultList" type="GoodsPrint">
+		<result property="id" column="ID" />
+		<result property="goodsNo" column="GOODS_NO" />
+		<result property="goodsName" column="GOODS_NAME" />
+		<result property="pdQuantity" column="PD_QUANTITY" />
+		<result property="goodsUnit" column="GOODS_UNIT" />
+		<result property="minAlarmQuantity" column="MIN_ALARM_QUANTITY" />
+		<result property="minOrderQuantity" column="MIN_ORDER_QUANTITY" />
+		<result property="pdName" column="PD_NAME" />
+		<result property="pdPhone" column="PD_PHONE" />
+		<result property="salePrice" column="SALE_PRICE" />
+		<result property="goodsPrice" column="GOODS_PRICE" />
+		<result property="nation" column="NATION" />
+		<result property="pdAddress" column="PD_ADDRESS" />
+	</resultMap>
+
+
+	<!-- 상품 전체 보기 -->
+	<select id="selectListCount" resultType="int" parameterType="int">
+		SELECT COUNT(*)
+		FROM
+		TB_GOODS_${ ID }
+	</select>
+
+	<select id="selectGoodsPrint" parameterType="Paging" resultMap="GoodsResultList">
+	    select *
+	    from
+		    (SELECT 
+    			ROWNUM rnum, GOODS_NO, GOODS_NAME, PD_QUANTITY, GOODS_UNIT, 
+    			MIN_ORDER_QUANTITY, MIN_ALARM_QUANTITY, SALE_PRICE,
+    			PD_NAME, PD_PHONE, GOODS_PRICE, NATION, PD_ADDRESS 
+			FROM (SELECT 
+        			  GOODS_NO, GOODS_NAME, PD_QUANTITY, GOODS_UNIT, 
+         			  MIN_ORDER_QUANTITY, MIN_ALARM_QUANTITY, SALE_PRICE,
+        			  PD_NAME, PD_PHONE, GOODS_PRICE, NATION, PD_ADDRESS
+    				  FROM TB_GOODS_${ id } 
+    				  LEFT JOIN TB_INVENTORY_${ id } USING (GOODS_NO)
+    				  LEFT JOIN TB_PRODUCE_${ id } USING (GOODS_NO)
+    				  WHERE ID = ${ id }
+    				  ORDER BY GOODS_NO ASC))
+		where rnum between #{startRow} and #{endRow}	
+	</select>
+
+	<!-- 상품명 검색 -->
+	<select id="selectSearchGoodsNameCount" parameterType="Search" resultType="int">
+		SELECT COUNT(*)
+		FROM TB_GOODS_${ id }
+		WHERE GOODS_NAME LIKE '%' || #{ keyword } || '%'
+	</select>
+
+	<select id="selectSearchGoodsName" parameterType="Search" resultMap="GoodsResultList">
+	    select *
+	    from
+		    (SELECT 
+    			ROWNUM rnum, GOODS_NO, GOODS_NAME, PD_QUANTITY, GOODS_UNIT, 
+    			MIN_ORDER_QUANTITY, MIN_ALARM_QUANTITY, SALE_PRICE,
+    			PD_NAME, PD_PHONE, GOODS_PRICE, NATION, PD_ADDRESS 
+			FROM (SELECT 
+        			  GOODS_NO, GOODS_NAME, PD_QUANTITY, GOODS_UNIT, 
+         			  MIN_ORDER_QUANTITY, MIN_ALARM_QUANTITY, SALE_PRICE,
+        			  PD_NAME, PD_PHONE, GOODS_PRICE, NATION, PD_ADDRESS
+    				  FROM TB_GOODS_${ id }
+    				  LEFT JOIN TB_INVENTORY_${ id } USING (GOODS_NO)
+    				  LEFT JOIN TB_PRODUCE_${ id } USING (GOODS_NO)
+    				  WHERE ID = ${ id }
+    				  AND GOODS_NAME LIKE '%' || #{ keyword } || '%'
+    				  ORDER BY GOODS_NO ASC))
+		where rnum between #{startRow} and #{endRow}    
+	</select>
+
+	<!-- 발주처 검색 -->
+	<select id="selectSearchPdNameCount" parameterType="Search" resultType="int">
+		SELECT COUNT(*)
+		FROM TB_GOODS_${ id }
+		LEFT JOIN TB_PRODUCE_${ id } USING (GOODS_NO)
+		WHERE PD_NAME LIKE '%' || #{ keyword } || '%'
+	</select>
+
+	<select id="selectSearchPdName" parameterType="Search" resultMap="GoodsResultList">
+	    select *
+	    from
+		    (SELECT 
+    			ROWNUM rnum, GOODS_NO, GOODS_NAME, PD_QUANTITY, GOODS_UNIT, 
+    			MIN_ORDER_QUANTITY, MIN_ALARM_QUANTITY, SALE_PRICE,
+    			PD_NAME, PD_PHONE, GOODS_PRICE, NATION, PD_ADDRESS 
+			FROM (SELECT 
+        			  GOODS_NO, GOODS_NAME, PD_QUANTITY, GOODS_UNIT, 
+         			  MIN_ORDER_QUANTITY, MIN_ALARM_QUANTITY, SALE_PRICE,
+        			  PD_NAME, PD_PHONE, GOODS_PRICE, NATION, PD_ADDRESS
+    				  FROM TB_GOODS_${ id }
+    				  LEFT JOIN TB_INVENTORY_${ id } USING (GOODS_NO)
+    				  LEFT JOIN TB_PRODUCE_${ id } USING (GOODS_NO)
+    				  WHERE PD_NAME LIKE '%' || #{ keyword } || '%'
+    				  AND ID = ${ id }
+    				  ORDER BY GOODS_NO ASC))
+		where rnum between #{startRow} and #{endRow}    
+	</select>
+
+	<!-- 상품 등록 -->
+	<insert id="insertGoods" parameterType="goodsPrint">
+	INSERT ALL
+
+    INTO TB_GOODS_${id} (ID, GOODS_NO, GOODS_NAME, GOODS_UNIT, GOODS_PRICE, NATION)
+    VALUES (${id}, 
+    		   (TB_GOODS_${id}_GOODS_NO_SEQ.NEXTVAL), 
+    		   #{goodsName}, #{goodsUnit}, #{goodsPrice}, #{nation})
+
+    INTO TB_INVENTORY_${id} (GOODS_NO, PD_QUANTITY, MIN_ALARM_QUANTITY, MIN_ORDER_QUANTITY)
+    VALUES ((TB_GOODS_${id}_GOODS_NO_SEQ.NEXTVAL), 
+    			#{pdQuantity}, 
+    			#{minAlarmQuantity}, 
+    			#{minOrderQuantity})
+  
+    INTO TB_PRODUCE_${id} (GOODS_NO, PD_NO, PD_NAME, PD_PHONE)
+    VALUES ((TB_GOODS_${id}_GOODS_NO_SEQ.NEXTVAL), 
+    			(TB_PRODUCE_${id}_PD_NO_SEQ.NEXTVAL), 
+    			#{pdName},
+    			#{pdPhone})
+
+	SELECT * FROM DUAL
+	</insert>
+	
+	<!-- 상품 제거 -->
+	<delete id="deleteGoods" parameterType="goodsPrint" >
+	DELETE FROM TB_GOODS_${id}
+	WHERE GOODS_NO = #{goodsNo}
+	</delete>
+	
+	<select id="selectProducePrint" parameterType="Paging" resultMap="GoodsResultList">
+	    select *
+	    from
+		    (SELECT 
+    			ROWNUM rnum, GOODS_NO, GOODS_NAME, PD_QUANTITY, GOODS_UNIT, 
+    			MIN_ORDER_QUANTITY, MIN_ALARM_QUANTITY, SALE_PRICE,
+    			PD_NAME, PD_PHONE, GOODS_PRICE, NATION, PD_ADDRESS 
+			FROM (SELECT 
+        			  GOODS_NO, GOODS_NAME, PD_QUANTITY, GOODS_UNIT, 
+         			  MIN_ORDER_QUANTITY, MIN_ALARM_QUANTITY, SALE_PRICE,
+        			  PD_NAME, PD_PHONE, GOODS_PRICE, NATION, PD_ADDRESS
+    				  FROM TB_GOODS_${ id } 
+    				  LEFT JOIN TB_INVENTORY_${ id } USING (GOODS_NO)
+    				  LEFT JOIN TB_PRODUCE_${ id } USING (GOODS_NO)
+    				  WHERE ID = ${ id }
+    				  ORDER BY GOODS_NO ASC))
+		where rnum between #{startRow} and #{endRow}	
+	</select>
+	
+	<!-- 명세서 - 상품명 검색 -->
+	<select id="selectSSearchGoodsName" parameterType="Search" resultMap="GoodsResultList">
+	   SELECT GOODS_NO, GOODS_NAME, PD_QUANTITY, GOODS_UNIT, 
+         		  MIN_ORDER_QUANTITY, MIN_ALARM_QUANTITY, 
+        		  PD_NAME, PD_PHONE, GOODS_PRICE, NATION, PD_ADDRESS
+       FROM TB_GOODS_${ id }
+       LEFT JOIN TB_INVENTORY_${ id } USING (GOODS_NO)
+       LEFT JOIN TB_PRODUCE_${ id } USING (GOODS_NO)
+       WHERE ID = ${ id }
+       AND GOODS_NAME = #{ keyword } 
+       ORDER BY GOODS_NO ASC 
+	</select>
+	
+	<!-- 명세서 - 발주처 검색 -->
+	<select id="selectSSearchpdName" parameterType="Search" resultMap="GoodsResultList">
+	   SELECT GOODS_NO, GOODS_NAME, PD_QUANTITY, GOODS_UNIT, 
+         		  MIN_ORDER_QUANTITY, MIN_ALARM_QUANTITY, SALE_PRICE,
+        		  PD_NAME, PD_PHONE, GOODS_PRICE, NATION, PD_ADDRESS
+       FROM TB_GOODS_${ id }
+       LEFT JOIN TB_INVENTORY_${ id } USING (GOODS_NO)
+       LEFT JOIN TB_PRODUCE_${ id } USING (GOODS_NO)
+       WHERE ID = ${ id }
+       AND PD_NAME = #{ keyword } 
+       ORDER BY GOODS_NO ASC 
+	</select>
+	
+	
+	
+	<!-- 발주처 등록 -->
+	<insert id="insertProduce" parameterType="goodsPrint">
+	INSERT ALL
+    
+    INTO TB_GOODS_${id} (ID, GOODS_NO, GOODS_NAME, GOODS_UNIT, GOODS_PRICE, NATION)
+    VALUES (${id}, 
+    		   (select max(GOODS_NO)+1 from TB_GOODS_${ id }), 
+    		   #{goodsName}, #{goodsUnit}, #{goodsPrice}, #{nation})
+    
+    INTO TB_INVENTORY_${id} (GOODS_NO, PD_QUANTITY )
+    VALUES ((select max(GOODS_NO)+1 from TB_GOODS_${ id }), #{pdQuantity})
+  
+    INTO TB_PRODUCE_${id} (GOODS_NO, PD_NO, PD_NAME, PD_PHONE, PD_ADDRESS)
+    VALUES ((select max(GOODS_NO)+1 from TB_GOODS_${ id }), 
+    			(select max(PD_NO)+1 from TB_PRODUCE_${ id }),
+    			#{pdName},
+    			#{pdPhone},
+    			#{pdAddress})
+
+	SELECT * FROM DUAL
+	</insert>
+	
+	<!-- 발주처 제거 -->
+	<delete id="deleteProduce" parameterType="goodsPrint" >
+	DELETE FROM TB_GOODS_${id}
+	WHERE GOODS_NO = #{goodsNo}
+	</delete>
+	
+	<!-- 상품 수정 - 상품 테이블 -->
+	<update id="updateGoodsGT" parameterType="goodsPrint" >
+	UPDATE TB_GOODS_${id} 
+	SET GOODS_PRICE = #{goodsPrice},
+		  SALE_PRICE = #{salePrice}
+	WHERE GOODS_NO = #{ goodsNo }
+	</update>
+	
+	<!-- 상품 수정 - 재고 테이블 -->
+	<update id="updateGoodsIT" parameterType="goodsPrint" >
+	UPDATE TB_INVENTORY_${id} 
+	SET PD_QUANTITY = #{pdQuantity},
+		  MIN_ORDER_QUANTITY = #{minOrderQuantity},
+		  MIN_ALARM_QUANTITY = #{minOrderQuantity}
+	WHERE GOODS_NO = #{ goodsNo }
+	</update>
+	
+	<!-- 발주처 수정 - 상품 테이블 -->
+	<update id="updateProduceGT" parameterType="goodsPrint" >
+	UPDATE TB_GOODS_${id} 
+	SET GOODS_UNIT = #{goodsUnit},
+		  NATION = #{nation}
+	WHERE GOODS_NO = #{ goodsNo }
+	</update>
+	
+	<!-- 발주처 수정 - 발주처 테이블 -->
+	<update id="updateProducePT" parameterType="goodsPrint" >
+	UPDATE TB_PRODUCE_${id} 
+	SET PD_PHONE = #{pdPhone},
+		  PD_ADDRESS = #{pdAddress}
+	WHERE GOODS_NO = #{ goodsNo }
+	</update>
+	
+	
+	<select id="searchId" parameterType="Search" resultType="int">
+	select GOODS_NO
+	from TB_GOODS_${id}
+	WHERE GOODS_NAME = #{goodsName}
+	</select>
+	
+	<update id="updatePdQuantity" parameterType="goodsPrint" >
+	UPDATE TB_INVENTORY_${id} 
+	SET PD_QUANTITY = #{pdQuantity}
+	WHERE GOODS_NO = #{ goodsNo }
+	</update>
+	
+	<select id="originQuantity" parameterType="Search" resultType="int">
+	select PD_QUANTITY
+	from TB_INVENTORY_${id}
+	WHERE GOODS_NO = #{goodsNo}
+	</select>
+	
+</mapper>

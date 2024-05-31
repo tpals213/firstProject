@@ -1,0 +1,18 @@
+* 아래 폴더로 copy 해서 사용하세요(제외된 파일입니다.)
+
+-- project import 전 작업
+1. pom.xml 
+   1) ssm/
+   2) 경로에 복사 후 붙여넣기 후, project import 전 작업
+
+2. .classpath
+	1) ssm/
+	2) 경로에 복사 후 붙여넣기 후, project import 전 작업
+	
+3. .project
+	1) ssm/
+	2) 경로에 복사 후 붙여넣기 후, project import 전 작업
+	
+4. log4j.xml 
+  1) /ssm/src/main/resources
+  2) 15번째 줄에 있는 경로를 작업 PC 환경에 맞게 변경하여 사용하세요.

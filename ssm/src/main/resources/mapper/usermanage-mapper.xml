@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userManageMapper">
+	<resultMap type="User" id="resultUser">
+		<result property="id" column="ID" />
+		<result property="userId" column="USER_ID" />
+		<result property="passWd" column="PASSWD" />
+		<result property="email" column="EMAIL" />
+		<result property="userNo" column="USER_NO" />
+		<result property="phone" column="PHONE" />
+		<result property="accountNumber" column="ACCOUNT_NUMBER" />
+		<result property="bankName" column="BANK_NAME" />
+		<result property="profileUrl" column="PROFILE_URL" />
+		<result property="isQuit" column="IS_QUIT" />
+		<result property="adminOk" column="ADMIN_OK" />
+		<result property="loginOk" column="LOGIN_OK" />
+		<result property="lastModified" column="LAST_MODIFIED" />
+		<result property="serviceDate" column="SERVICE_DATE" />
+		<result property="businessNo" column="BUSINESS_NO" />
+		<result property="businessStoreName"
+			column="BUSINESS_STORE_NAME" />
+	</resultMap>
+	<resultMap type="Suspension" id="resultSuspension">
+		<result property="suspensionNo" column="SUSPENSION_NO" />
+		<result property="targetAccount" column="TARGET_ACCOUNT" />
+		<result property="suspensionStart" column="SUSPENSION_START" />
+		<result property="suspensionEnd" column="SUSPENSION_END" />
+		<result property="suspensionTitle" column="SUSPENSION_TITLE" />
+		<result property="suspensionContent"
+			column="SUSPENSION_CONTENT" />
+	</resultMap>
+	<resultMap type="CountUser" id="resultCountUser">
+		<result property="month" column="month" />
+		<result property="Count" column="count" />
+	</resultMap>
+	<resultMap type="Sales" id="resultSales">
+		<result property="month" column="month" />
+		<result property="sales" column="sales" />
+	</resultMap>
+	<select id="selectSuspenseList" parameterType="string" resultMap="resultSuspension">
+	select * from tb_user_suspension where target_account=${id}
+	</select>
+	<!-- 유저검색 -->
+	<select id="selectSearchIdCount" parameterType="string" resultType="_int">
+	select count(*) from tb_user where user_id Like '%${id}%'
+	</select>
+	<select id="selectSearchStoreCount" parameterType="string" resultType="_int">
+	select count(*) from tb_user where BUSINESS_STORE_NAME LIKE '%${store}%'
+	</select>
+	<select id="selectSearchId" parameterType="Search" resultMap="resultUser">
+				select * from (select rownum rnum, ID, USER_ID, PASSWD, EMAIL, USER_NO, PHONE, ACCOUNT_NUMBER, BANK_NAME, PROFILE_URL, IS_QUIT, ADMIN_OK, LOGIN_OK, LAST_MODIFIED, SERVICE_DATE, BUSINESS_NO, BUSINESS_STORE_NAME
+       					   from(select * from tb_user where user_id like '%${keyword}%'
+                       	 order by LAST_MODIFIED desc) )
+	where rnum between #{startRow} and #{endRow}
+	</select>
+	<select id="selectSearchStore" parameterType="Search" resultMap="resultUser">
+					select * from (select rownum rnum, ID, USER_ID, PASSWD, EMAIL, USER_NO, PHONE, ACCOUNT_NUMBER, BANK_NAME, PROFILE_URL, IS_QUIT, ADMIN_OK, LOGIN_OK, LAST_MODIFIED, SERVICE_DATE, BUSINESS_NO, BUSINESS_STORE_NAME
+       					   from(select * from tb_user where BUSINESS_STORE_NAME like '%${keyword}%'
+                       	 order by LAST_MODIFIED desc) )
+	where rnum between #{startRow} and #{endRow}
+	</select>
+	<!-- 정지정보검색 -->
+	<select id ="selectSuspenseNo" parameterType="_int" resultType="string">
+	select max(suspension_no) from tb_user_suspension where target_account = #{id}
+	</select>
+	<!-- 월별 가입자수 조회 -->
+	<select id="selectCountUserByEnrollDate" parameterType="_int" resultMap="resultCountUser">
+	select to_char(LAST_MODIFIED, 'MM') as month, count(*) count
+from tb_user
+where to_char(last_modified,'YYYY') = #{year}
+group by to_char(LAST_MODIFIED, 'MM')
+	</select>
+	<!-- 월별 사용자수 조회 -->
+	<select id="selectCountUserByServiceDate" parameterType="_int" resultMap="resultCountUser">
+	select to_char(PAY_DATE, 'MM') as month, count(*) count
+from TB_SUBSCRIBE_PAYMENT
+where to_char(PAY_DATE,'YYYY') = #{year}
+group by to_char(PAY_DATE, 'MM')
+	</select>
+	<!-- 월별 매출 조회 -->
+	<select id="selectSalesList" parameterType="_int" resultMap="resultSales">
+	select to_char(PAY_DATE, 'MM') as month, sum(amount) sales
+from TB_SUBSCRIBE_PAYMENT
+where to_char(PAY_DATE,'YYYY') = #{year}
+group by to_char(PAY_DATE, 'MM')
+	</select>
+	<update id="updateUserAccountSuspendMethod" parameterType="_int">
+		update tb_user set login_ok = 'N' where id = #{id}
+	</update>
+	<update id="updateUserAccountActivateMethod"
+		parameterType="_int">
+		update tb_user set login_ok = 'Y' where id = #{id}
+	</update>
+	<update id="updateSuspension" parameterType="_int">
+		update tb_user_suspension set SUSPENSION_END = sysdate where TARGET_ACCOUNT
+		= #{id}
+	</update>
+	<insert id="insertSuspension" parameterType="Suspension">
+		insert into tb_user_suspension
+		values(SUSPENSION_SEQ.NEXTVAL,#{targetAccount},sysdate,null,#{suspensionTitle},#{suspensionContent})
+	</insert>
+
+</mapper>
